@@ -1,6 +1,6 @@
-# Advanced Formal Language Theory (263-5352-00L; Frühjahr 2023)
+# Advanced Formal Language Theory (263-5352-00L; Spring 2024)
 
-[Website](https://rycolab.io/classes/aflt-s23/)
+[Website](https://rycolab.io/classes/aflt-s24/)
 
 This course serves as an introduction to various advanced topics in formal language theory. The primary focus of the course is on weighted formalisms, which can easily be applied in machine learning. Topics include finite-state machines as well as the algorithms that are commonly used for their manipulation. We will also cover weighted context-free grammars, weighted tree automata, and weighted mildly context-sensitive formalisms.
 
@@ -33,7 +33,7 @@ git pull --allow-unrelated-histories
 #### Merging the Template
 To merge the latest changes in the template repository to your private repository, use
 ```
-git remote add template https://github.com/Advanced-Formal-Language-Theory/aflt-f2023
+git remote add template https://github.com/ETH-Advanced-Formal-Language-Theory/aflt-s2024
 git fetch --all
 git merge template/main --allow-unrelated-histories
 ```
