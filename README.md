@@ -9,9 +9,9 @@ This repository will contain pieces of the `rayuela` library and some teaching m
 
 ## Installation
 To install the course library run 
-``
+```
 pip install -e .
-``
+```
 in the base directory.
 
 ## Code Updates
@@ -24,7 +24,7 @@ In both cases, you won't be able to automatically merge the template code with y
 Complete the merging with care, as you might lose part of your code or important updates to the template!
 
 #### Re-accepting the Assignments
-This can be done by deleting your private repository (on Github) and joining Classroom again [here](https://classroom.github.com/a/S3wv6tmh).
+This can be done by deleting your private repository (on Github) and joining Classroom again [here](https://classroom.github.com/a/_YxlmtX1).
 After you re-accepted the assignment, you will have to locally pull and merge the updated template with your repo with
 ```
 git pull --allow-unrelated-histories
