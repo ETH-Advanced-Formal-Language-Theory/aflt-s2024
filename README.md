@@ -10,7 +10,7 @@ This repository will contain pieces of the `rayuela` library and some teaching m
 ## Installation
 To install the course library run 
 ```
-pip install -e .
+bash autograding_tests/setup_test_env.sh
 ```
 in the base directory.
 
