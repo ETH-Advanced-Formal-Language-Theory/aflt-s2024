@@ -40,5 +40,13 @@ git merge template/main --allow-unrelated-histories
 
 
 ## Testing
-Every commit that you push to this repository will be automatically evaluated by a dedicated Github Workflow.
-For debugging your implementations, you can also run the tests locally. To run all the tests, you can use `pytest .` in the base directory. If you want to test only a specific assignment, you can use `pytest autograding_tests/test_hw[num].py`.
+
+
+1. ### Testing online  
+   Every commit that you push to this repository will be automatically evaluated by a dedicated Github Workflow.
+
+2. ### Testing locally  
+    For debugging your implementations, you can also run the tests locally. 
+    To run all the tests, you can use `pytest .` in the base directory. 
+    If you want to test only a specific assignment, you can use `pytest autograding_tests/test_hw[num].py`.
+
