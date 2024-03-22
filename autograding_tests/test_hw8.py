@@ -121,3 +121,146 @@ def test_earley():
         score = float(ep.earley(input))
         compare_chart(cfg.R, chart, gold_chart)
         assert allclose(score, gold_score, atol=1e-5)
+
+def parse_unambiguous():
+    cfg = CFG.from_string("""
+        1.0: S → A B
+        0.3: B → A B
+        0.5: A → a
+        0.4: B → b
+    """, Real)
+
+    earley = Earley(cfg)
+    assert earley.parse("ab") == Real(0.2)
+    assert earley.parse("aab") == Real(0.03)
+    assert earley.parse("aaab") == Real(0.0045)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("ab") == Real(0.2)
+    assert earleyfast.parse("aab") == Real(0.03)
+    assert earleyfast.parse("aaab") == Real(0.0045)
+
+
+def parse_left_recursive():
+
+    cfg = CFG.from_string("""
+        1.0: S → A B
+        0.3: A → A B
+        0.5: A → a
+        0.4: B → b
+    """, Real)
+
+    earley = Earley(cfg)
+    assert earley.parse("ab") == Real(0.2)
+    assert earley.parse("abb") == Real(0.024)
+    assert earley.parse("abbb") == Real(0.00288)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("ab") == Real(0.2)
+    assert earleyfast.parse("abb") == Real(0.024)
+    assert earleyfast.parse("abbb") == Real(0.00288)
+
+def parse_unary():
+    # grammar contains non-cyclic unary rules
+    cfg = CFG.from_string("""
+        1.0: S → B
+        0.3: B → A B
+        0.2: B → A
+        0.5: A → a
+    """, Real)
+
+    earley = Earley(cfg)
+    assert earley.parse("a") == Real(0.1)
+    assert earley.parse("aa") == Real(0.015)
+    assert earley.parse("aaa") == Real(0.00225)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("a") == Real(0.1)
+    assert earleyfast.parse("aa") == Real(0.015)
+    assert earleyfast.parse("aaa") == Real(0.00225)
+
+    cfg = CFG.from_string("""
+        1.0: S → A
+        0.5: S → c A
+        0.3: A → B
+        0.2: B → C
+        0.5: C → c
+    """, Real)
+
+    earley = Earley(cfg)
+    assert earley.parse("c") == Real(0.03)
+    assert earley.parse("cc") == Real(0.015)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("c") == Real(0.03)
+    assert earleyfast.parse("cc") == Real(0.015)
+
+def parse_mixed():
+
+    cfg = CFG.from_string("""
+        1.0: S → a B c D
+        0.4: S → A b
+        0.1: B → b b
+        0.5: A → a
+        0.3: D → d
+    """, Real)
+
+    earley = Earley(cfg)
+    assert earley.parse("ab") == Real(0.2)
+    assert earley.parse("abbcd") == Real(0.03)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("ab") == Real(0.2)
+    assert earleyfast.parse("abbcd") == Real(0.03)
+
+def parse_ambiguous():
+
+    cfg = CFG.from_string("""
+        1.0: S → A
+        0.4: A → A + A
+        0.1: A → A - A
+        0.5: A → a
+    """, Real)
+
+    earley = Earley(cfg)
+    assert earley.parse("a") == Real(0.5)
+    assert earley.parse("a+a") == Real(0.1)
+    assert earley.parse("a+a+a") == Real(0.04)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("a") == Real(0.5)
+    assert earleyfast.parse("a+a") == Real(0.1)
+    assert earleyfast.parse("a+a+a") == Real(0.04)
+
+    cfg = CFG.from_string("""
+        1.0: S → A
+        0.4: A → A + A
+        0.1: A → A - A
+        0.5: A → a
+    """, MaxTimes)
+
+    earley = Earley(cfg)
+    assert earley.parse("a") == MaxTimes(0.5)
+    assert earley.parse("a+a") == MaxTimes(0.1)
+    assert earley.parse("a+a+a") == MaxTimes(0.02)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("a") == MaxTimes(0.5)
+    assert earleyfast.parse("a+a") == MaxTimes(0.1)
+    assert earleyfast.parse("a+a+a") == MaxTimes(0.02)
+
+    cfg = CFG.from_string("""
+        0.4: A → A + A
+        0.1: A → A - A
+        0.5: A → a
+    """, Real, start="A")
+
+    earley = Earley(cfg)
+    assert earley.parse("a") == Real(0.5)
+    assert earley.parse("a+a") == Real(0.1)
+    assert earley.parse("a+a+a") == Real(0.04)
+
+    earleyfast = EarleyFast(cfg)
+    assert earleyfast.parse("a") == Real(0.5)
+    assert earleyfast.parse("a+a") == Real(0.1)
+    assert earleyfast.parse("a+a+a") == Real(0.04)
