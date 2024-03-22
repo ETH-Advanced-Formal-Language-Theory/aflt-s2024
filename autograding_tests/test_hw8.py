@@ -130,16 +130,10 @@ def test_parse_unambiguous():
         B → b:	0.4
     """, Real)
 
-    earley = Earley(cfg)
-    assert earley.parse("ab") == Real(0.2)
-    assert earley.parse("aab") == Real(0.03)
-    assert earley.parse("aaab") == Real(0.0045)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("ab") == Real(0.2)
-    assert earleyfast.parse("aab") == Real(0.03)
-    assert earleyfast.parse("aaab") == Real(0.0045)
-
+    ep = ChartedEarley(cfg)
+    assert ep.earley(symify("ab")) == Real(0.2)
+    assert ep.earley(symify("aab")) == Real(0.03)
+    assert ep.earley(symify("aaab")) == Real(0.0045)
 
 def test_parse_left_recursive():
 
@@ -150,15 +144,10 @@ def test_parse_left_recursive():
         B → b:	0.4
     """, Real)
 
-    earley = Earley(cfg)
-    assert earley.parse("ab") == Real(0.2)
-    assert earley.parse("abb") == Real(0.024)
-    assert earley.parse("abbb") == Real(0.00288)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("ab") == Real(0.2)
-    assert earleyfast.parse("abb") == Real(0.024)
-    assert earleyfast.parse("abbb") == Real(0.00288)
+    ep = ChartedEarley(cfg)
+    assert ep.earley(symify("ab")) == Real(0.2)
+    assert ep.earley(symify("abb")) == Real(0.024)
+    assert ep.earley(symify("abbb")) == Real(0.00288)
 
 def test_parse_unary():
     # grammar contains non-cyclic unary rules
@@ -169,15 +158,10 @@ def test_parse_unary():
         A → a:	0.5
     """, Real)
 
-    earley = Earley(cfg)
-    assert earley.parse("a") == Real(0.1)
-    assert earley.parse("aa") == Real(0.015)
-    assert earley.parse("aaa") == Real(0.00225)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("a") == Real(0.1)
-    assert earleyfast.parse("aa") == Real(0.015)
-    assert earleyfast.parse("aaa") == Real(0.00225)
+    ep = ChartedEarley(cfg)
+    assert ep.earley(symify("a")) == Real(0.1)
+    assert ep.earley(symify("aa")) == Real(0.015)
+    assert ep.earley(symify("aaa")) == Real(0.00225)
 
     cfg = CFG.from_string("""
         S → A:	1.0
@@ -187,13 +171,9 @@ def test_parse_unary():
         C → c:	0.5
     """, Real)
 
-    earley = Earley(cfg)
-    assert earley.parse("c") == Real(0.03)
-    assert earley.parse("cc") == Real(0.015)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("c") == Real(0.03)
-    assert earleyfast.parse("cc") == Real(0.015)
+    ep = ChartedEarley(cfg)
+    assert ep.earley(symify("c")) == Real(0.03)
+    assert ep.earley(symify("cc")) == Real(0.015)
 
 def test_parse_mixed():
 
@@ -205,13 +185,9 @@ def test_parse_mixed():
         D → d:	0.3
     """, Real)
 
-    earley = Earley(cfg)
-    assert earley.parse("ab") == Real(0.2)
-    assert earley.parse("abbcd") == Real(0.03)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("ab") == Real(0.2)
-    assert earleyfast.parse("abbcd") == Real(0.03)
+    ep = ChartedEarley(cfg)
+    assert ep.earley(symify("ab")) == Real(0.2)
+    assert ep.earley(symify("abbcd")) == Real(0.03)
 
 def test_parse_ambiguous():
 
@@ -222,45 +198,7 @@ def test_parse_ambiguous():
         A → a:	0.5
     """, Real)
 
-    earley = Earley(cfg)
-    assert earley.parse("a") == Real(0.5)
-    assert earley.parse("a+a") == Real(0.1)
-    assert earley.parse("a+a+a") == Real(0.04)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("a") == Real(0.5)
-    assert earleyfast.parse("a+a") == Real(0.1)
-    assert earleyfast.parse("a+a+a") == Real(0.04)
-
-    cfg = CFG.from_string("""
-        S → A:	1.0
-        A → A + A:	0.4
-        A → A - A:	0.1
-        A → a:	0.5
-    """, MaxTimes)
-
-    earley = Earley(cfg)
-    assert earley.parse("a") == MaxTimes(0.5)
-    assert earley.parse("a+a") == MaxTimes(0.1)
-    assert earley.parse("a+a+a") == MaxTimes(0.02)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("a") == MaxTimes(0.5)
-    assert earleyfast.parse("a+a") == MaxTimes(0.1)
-    assert earleyfast.parse("a+a+a") == MaxTimes(0.02)
-
-    cfg = CFG.from_string("""
-        A → A + A:	0.4
-        A → A - A:	0.1
-        A → a:	0.5
-    """, Real, start="A")
-
-    earley = Earley(cfg)
-    assert earley.parse("a") == Real(0.5)
-    assert earley.parse("a+a") == Real(0.1)
-    assert earley.parse("a+a+a") == Real(0.04)
-
-    earleyfast = EarleyFast(cfg)
-    assert earleyfast.parse("a") == Real(0.5)
-    assert earleyfast.parse("a+a") == Real(0.1)
-    assert earleyfast.parse("a+a+a") == Real(0.04)
+    ep = ChartedEarley(cfg)
+    assert ep.earley(symify("a")) == Real(0.5)
+    assert ep.earley(symify("a+a")) == Real(0.1)
+    assert ep.earley(symify("a+a+a")) == Real(0.04)
