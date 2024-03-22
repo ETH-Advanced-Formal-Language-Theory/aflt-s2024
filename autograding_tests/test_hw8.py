@@ -122,12 +122,12 @@ def test_earley():
         compare_chart(cfg.R, chart, gold_chart)
         assert allclose(score, gold_score, atol=1e-5)
 
-def parse_unambiguous():
+def test_parse_unambiguous():
     cfg = CFG.from_string("""
-        1.0: S → A B
-        0.3: B → A B
-        0.5: A → a
-        0.4: B → b
+        S → A B:	1.0
+        B → A B:	0.3
+        A → a:	0.5
+        B → b:	0.4
     """, Real)
 
     earley = Earley(cfg)
@@ -141,13 +141,13 @@ def parse_unambiguous():
     assert earleyfast.parse("aaab") == Real(0.0045)
 
 
-def parse_left_recursive():
+def test_parse_left_recursive():
 
     cfg = CFG.from_string("""
-        1.0: S → A B
-        0.3: A → A B
-        0.5: A → a
-        0.4: B → b
+        S → A B:	1.0
+        A → A B:	0.3
+        A → a:	0.5
+        B → b:	0.4
     """, Real)
 
     earley = Earley(cfg)
@@ -160,13 +160,13 @@ def parse_left_recursive():
     assert earleyfast.parse("abb") == Real(0.024)
     assert earleyfast.parse("abbb") == Real(0.00288)
 
-def parse_unary():
+def test_parse_unary():
     # grammar contains non-cyclic unary rules
     cfg = CFG.from_string("""
-        1.0: S → B
-        0.3: B → A B
-        0.2: B → A
-        0.5: A → a
+        S → B:	1.0
+        B → A B:	0.3
+        B → A:	0.2
+        A → a:	0.5
     """, Real)
 
     earley = Earley(cfg)
@@ -180,11 +180,11 @@ def parse_unary():
     assert earleyfast.parse("aaa") == Real(0.00225)
 
     cfg = CFG.from_string("""
-        1.0: S → A
-        0.5: S → c A
-        0.3: A → B
-        0.2: B → C
-        0.5: C → c
+        S → A:	1.0
+        S → c A:	0.5
+        A → B:	0.3
+        B → C:	0.2
+        C → c:	0.5
     """, Real)
 
     earley = Earley(cfg)
@@ -195,14 +195,14 @@ def parse_unary():
     assert earleyfast.parse("c") == Real(0.03)
     assert earleyfast.parse("cc") == Real(0.015)
 
-def parse_mixed():
+def test_parse_mixed():
 
     cfg = CFG.from_string("""
-        1.0: S → a B c D
-        0.4: S → A b
-        0.1: B → b b
-        0.5: A → a
-        0.3: D → d
+        S → a B c D:	1.0
+        S → A b:	0.4
+        B → b b:	0.1
+        A → a:	0.5
+        D → d:	0.3
     """, Real)
 
     earley = Earley(cfg)
@@ -213,13 +213,13 @@ def parse_mixed():
     assert earleyfast.parse("ab") == Real(0.2)
     assert earleyfast.parse("abbcd") == Real(0.03)
 
-def parse_ambiguous():
+def test_parse_ambiguous():
 
     cfg = CFG.from_string("""
-        1.0: S → A
-        0.4: A → A + A
-        0.1: A → A - A
-        0.5: A → a
+        S → A:	1.0
+        A → A + A:	0.4
+        A → A - A:	0.1
+        A → a:	0.5
     """, Real)
 
     earley = Earley(cfg)
@@ -233,10 +233,10 @@ def parse_ambiguous():
     assert earleyfast.parse("a+a+a") == Real(0.04)
 
     cfg = CFG.from_string("""
-        1.0: S → A
-        0.4: A → A + A
-        0.1: A → A - A
-        0.5: A → a
+        S → A:	1.0
+        A → A + A:	0.4
+        A → A - A:	0.1
+        A → a:	0.5
     """, MaxTimes)
 
     earley = Earley(cfg)
@@ -250,9 +250,9 @@ def parse_ambiguous():
     assert earleyfast.parse("a+a+a") == MaxTimes(0.02)
 
     cfg = CFG.from_string("""
-        0.4: A → A + A
-        0.1: A → A - A
-        0.5: A → a
+        A → A + A:	0.4
+        A → A - A:	0.1
+        A → a:	0.5
     """, Real, start="A")
 
     earley = Earley(cfg)
