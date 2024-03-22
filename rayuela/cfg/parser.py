@@ -74,6 +74,10 @@ class EarleyItem:
         self.dot = dot
         self.star = star
 
+    @property
+    def end(self):
+        return self.dot >= len(self.body)
+
     def __str__(self):
         body = []
         for n, X in enumerate(self.body):
