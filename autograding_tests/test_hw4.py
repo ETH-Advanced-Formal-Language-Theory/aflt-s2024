@@ -18,7 +18,7 @@ def test_determinization_example():
     """
 
     fsa = FSA(R=Tropical)
-		
+
     fsa.add_arc(State(0), 1, State(1), w=Tropical(1.0))
     fsa.add_arc(State(0), 1, State(2), w=Tropical(2.0))
     
