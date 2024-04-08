@@ -1,19 +1,46 @@
-name: GitHub Classroom Workflow
-
-on:
-  - push
-  - workflow_dispatch
-
+name: Autograding Tests
+'on':
+- push
+- workflow_dispatch
+- repository_dispatch
 permissions:
   checks: write
   actions: read
   contents: read
-
 jobs:
-  build:
-    name: Autograding
+  run-autograding-tests:
     runs-on: ubuntu-latest
     if: github.actor != 'github-classroom[bot]'
     steps:
-      - uses: actions/checkout@v4
-      - uses: education/autograding@v1
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: test_all
+      id: test_all
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: test_all
+        setup-command: sh autograding_tests/setup_test_env.sh
+        command: pytest autograding_tests/test_hw[1-8].py
+        input: ''
+        expected-output: ''
+        comparison-method: exact
+        timeout: 10
+        max-score: 1
+    - name: checksum
+      id: checksum
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: checksum
+        setup-command: ''
+        command: sha1sum autograding_tests/test_hw*
+        input: ''
+        expected-output: 1a72834a6ba83d4392f086f30da96d905341927c  autograding_tests/test_hw1.py)\n21f49e94e80368ac71bd63882367d19c660dadf4  autograding_tests/test_hw2.py\n528ecafac27ac6eef91c03d9e5fec4682bc3df79  autograding_tests/test_hw3.py\ncd71f852a2aaab9ddf50c20e1c84256446a97412  autograding_tests/test_hw4.py\nf5ae0dfce2d3b741a017cfedb0f264e12ad1389e  autograding_tests/test_hw5.py\n5f15dcea836ac679d16149469f2ef9e33d5afa20  autograding_tests/test_hw6.py\n3c6d908d9c33a46bafebe30464b006b15125d565  autograding_tests/test_hw7.py\n9e02d97d5df92081dde67018a44d4fca56342b15  autograding_tests/test_hw8.p1a72834a6ba83d4392f086f30da96d905341927c  autograding_tests/test_hw1.py)\n21f49e94e80368ac71bd63882367d19c660dadf4  autograding_tests/test_hw2.py\n528ecafac27ac6eef91c03d9e5fec4682bc3df79  autograding_tests/test_hw3.py\ncd71f852a2aaab9ddf50c20e1c84256446a97412  autograding_tests/test_hw4.py\nf5ae0dfce2d3b741a017cfedb0f264e12ad1389e  autograding_tests/test_hw5.py\n5f15dcea836ac679d16149469f2ef9e33d5afa20  autograding_tests/test_hw6.py\n3c6d908d9c33a46bafebe30464b006b15125d565  autograding_tests/test_hw7.py\n9e02d97d5df92081dde67018a44d4fca56342b15  autograding_tests/test_hw8.py
+        comparison-method: exact
+        timeout: 10
+    - name: Autograding Reporter
+      uses: education/autograding-grading-reporter@v1
+      env:
+        TEST_ALL_RESULTS: "${{steps.test_all.outputs.result}}"
+        CHECKSUM_RESULTS: "${{steps.checksum.outputs.result}}"
+      with:
+        runners: test_all,checksum
