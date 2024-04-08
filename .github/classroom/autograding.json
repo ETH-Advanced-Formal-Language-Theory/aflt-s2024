@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "test_all",
+      "setup": "sh autograding_tests/setup_test_env.sh",
+      "run": "pytest autograding_tests/test_hw[1-8].py",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "checksum",
+      "setup": "",
+      "run": "sha1sum autograding_tests/test_hw*",
+      "input": "",
+      "output": "1a72834a6ba83d4392f086f30da96d905341927c  autograding_tests/test_hw1.py\\n21f49e94e80368ac71bd63882367d19c660dadf4  autograding_tests/test_hw2.py\\n528ecafac27ac6eef91c03d9e5fec4682bc3df79  autograding_tests/test_hw3.py\\ncd71f852a2aaab9ddf50c20e1c84256446a97412  autograding_tests/test_hw4.py\\nf5ae0dfce2d3b741a017cfedb0f264e12ad1389e  autograding_tests/test_hw5.py\\n5f15dcea836ac679d16149469f2ef9e33d5afa20  autograding_tests/test_hw6.py\\n3c6d908d9c33a46bafebe30464b006b15125d565  autograding_tests/test_hw7.py\\n9e02d97d5df92081dde67018a44d4fca56342b15  autograding_tests/test_hw8.py",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": null
+    }
+  ]
+}
