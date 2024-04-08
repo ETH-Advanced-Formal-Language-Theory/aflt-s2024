@@ -34,7 +34,7 @@ jobs:
         setup-command: ''
         command: sha1sum autograding_tests/test_hw*
         input: ''
-        expected-output: "1a72834a6ba83d4392f086f30da96d905341927c  autograding_tests/test_hw1.py\r\n21f49e94e80368ac71bd63882367d19c660dadf4
+        expected-output: "1a72834a6ba83d4392f086f30da96d905341927c  autograding_tests/test_hw1.py\n21f49e94e80368ac71bd63882367d19c660dadf4
           \ autograding_tests/test_hw2.py\n528ecafac27ac6eef91c03d9e5fec4682bc3df79
           \ autograding_tests/test_hw3.py\ncd71f852a2aaab9ddf50c20e1c84256446a97412
           \ autograding_tests/test_hw4.py\nf5ae0dfce2d3b741a017cfedb0f264e12ad1389e
