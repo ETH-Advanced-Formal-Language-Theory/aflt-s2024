@@ -21,9 +21,6 @@ jobs:
         test-name: test_all
         setup-command: sh autograding_tests/setup_test_env.sh
         command: pytest autograding_tests/test_hw[1-8].py
-        input: ''
-        expected-output: ''
-        comparison-method: exact
         timeout: 10
         max-score: 1
     - name: checksum
