@@ -8,6 +8,8 @@ This course serves as an introduction to various advanced topics in formal langu
 This repository will contain pieces of the `rayuela` library and some teaching material which you'll need to complete the course assignments.
 
 ## Installation
+
+We recommend a virtual environment with Python 3.9.
 To install the course library run 
 ```
 bash autograding_tests/setup_test_env.sh

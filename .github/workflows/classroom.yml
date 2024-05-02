@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v4
     - name: test_all
       id: test_all
-      uses: education/autograding-io-grader@v1
+      uses: education/autograding-command-grader@v1
       with:
         test-name: test_all
         setup-command: sh autograding_tests/setup_test_env.sh
@@ -25,7 +25,7 @@ jobs:
         max-score: 1
     - name: checksum
       id: checksum
-      uses: education/autograding-io-grader@v1
+      uses: education/autograding-command-grader@v1
       with:
         test-name: checksum
         setup-command: ''
